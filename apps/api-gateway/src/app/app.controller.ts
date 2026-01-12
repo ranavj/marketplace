@@ -3,44 +3,54 @@ import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { AppService } from './app.service';
 
-// ✅ Interface define kiya taaki TypeScript ko pata ho gRPC service mein kya methods hain
+// Interfaces match .proto definitions
 interface AuthService {
   register(data: any): Observable<any>;
   login(data: any): Observable<any>;
 }
 
-// ✅ Route Prefix 'auth' kar diya. Ab endpoints honge: /auth/register, /auth/login
-@Controller('auth')
+interface CatalogService {
+  createProduct(data: any): Observable<any>;
+  getProducts(data: any): Observable<any>;
+}
+
+@Controller() // Prefix hata diya taaki hum /auth aur /products alag define kar sakein
 export class AppController implements OnModuleInit {
   private authService: AuthService;
+  private catalogService: CatalogService;
 
   constructor(
     private readonly appService: AppService,
-    // 👇 Inject gRPC Client (Jo humne Module mein register kiya tha)
-    @Inject('AUTH_PACKAGE') private client: ClientGrpc
+    @Inject('AUTH_PACKAGE') private authClient: ClientGrpc,
+    @Inject('CATALOG_PACKAGE') private catalogClient: ClientGrpc // 👈 Inject Catalog Client
   ) {}
 
-  // 👇 Jab Module load ho jaye, tab Service Instance initialize karein
   onModuleInit() {
-    this.authService = this.client.getService<AuthService>('AuthService');
+    this.authService = this.authClient.getService<AuthService>('AuthService');
+    // 👇 Initialize Catalog Service
+    this.catalogService = this.catalogClient.getService<CatalogService>('CatalogService');
   }
 
-  // --- Old Method (Optional) ---
-  @Get()
-  getData() {
-    return this.appService.getData();
-  }
-
-  // --- New gRPC Methods ---
-
-  @Post('register')
+  // --- Auth Routes ---
+  @Post('auth/register')
   register(@Body() body: any) {
-    // HTTP Request aayi -> gRPC call kiya -> Response return kiya
     return this.authService.register(body);
   }
 
-  @Post('login')
+  @Post('auth/login')
   login(@Body() body: any) {
     return this.authService.login(body);
+  }
+
+  // --- 👇 NEW: Catalog Routes ---
+  
+  @Post('products')
+  createProduct(@Body() body: any) {
+    return this.catalogService.createProduct(body);
+  }
+
+  @Get('products')
+  getProducts() {
+    return this.catalogService.getProducts({}); // Empty object for Empty message
   }
 }

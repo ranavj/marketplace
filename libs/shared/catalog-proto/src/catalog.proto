@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package catalog;
+
+// 1. Data Structure (Product)
+message Product {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  string category = 5;
+}
+
+message CreateProductRequest {
+  string name = 1;
+  string description = 2;
+  double price = 3;
+  string category = 4;
+}
+
+message ProductList {
+  repeated Product products = 1;
+}
+
+message Empty {} // Khali request ke liye (Get All Products)
+
+// 2. Service Definition
+service CatalogService {
+  rpc CreateProduct (CreateProductRequest) returns (Product);
+  rpc GetProducts (Empty) returns (ProductList);
+}

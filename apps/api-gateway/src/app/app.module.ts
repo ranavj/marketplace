@@ -17,6 +17,15 @@ import { join } from 'path';
           url: '0.0.0.0:50051', // Auth Service ka Address
         },
       },
+      {
+        name: 'CATALOG_PACKAGE',
+        transport: Transport.GRPC,
+        options: {
+          package: 'catalog', // Match .proto package name
+          protoPath: join(process.cwd(), 'libs/shared/catalog-proto/src/catalog.proto'),
+          url: '0.0.0.0:50052', // Different Port!
+        },
+      },
     ]),
   ],
   controllers: [AppController],
