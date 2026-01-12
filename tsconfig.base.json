@@ -1,0 +1,51 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": [
+      "es2020",
+      "dom"
+    ],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@marketplace/shared/types": [
+        "libs/shared/types/src/index.ts"
+      ],
+      "@marketplace/shared/proto": [
+        "libs/shared/proto/src/index.ts"
+      ],
+      "@marketplace/shared/ui": [
+        "libs/shared/ui/src/index.ts"
+      ],
+      "@marketplace/shared/state": [
+        "libs/shared/state/src/index.ts"
+      ],
+      "@marketplace/shared/broadcast": [
+        "libs/shared/broadcast/src/index.ts"
+      ],
+      "@marketplace/auth-db": [
+        "node_modules/@prisma/client/auth-service"
+      ],
+      "discovery/Routes": [
+        "apps/discovery/src/app/remote-entry/entry.routes.ts"
+      ],
+      "checkout/Routes": [
+        "apps/checkout/src/app/remote-entry/entry.routes.ts"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
+}
