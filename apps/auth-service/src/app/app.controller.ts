@@ -1,30 +1,28 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices'; // ✅ gRPC Decorator
 import { AppService } from './app.service';
-import { CreateUserDto } from './dto/create-user.dto'; // ✅ DTO Import kiya
+import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) { }
+  constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getData() {
-    return this.appService.getData();
+  // ❌ 'getData' aur 'getUsers' hata diye hain kyunki wo .proto file mein defined nahi thay.
+  // gRPC mein sirf wahi function chalte hain jo .proto contract mein hote hain.
+
+  // ✅ 1. Register Method
+  // 'AuthService' = Proto file mein 'service AuthService'
+  // 'Register'    = Proto file mein 'rpc Register'
+  @GrpcMethod('AuthService', 'Register')
+  async register(data: CreateUserDto) {
+    // NestJS automatic data map kar dega DTO mein
+    return this.appService.createUser(data);
   }
 
-  @Post('register')
-  async register(@Body() body: CreateUserDto) {
-    return this.appService.createUser(body);
-  }
-
-  @HttpCode(HttpStatus.OK) // Default 201 hota hai, Login ke liye 200 OK better hai
-  @Post('login')
-  async login(@Body() body: LoginDto) {
-    return this.appService.login(body);
-  }
-
-  @Get('users')
-  async getUsers() {
-    return this.appService.getUsers();
+  // ✅ 2. Login Method
+  @GrpcMethod('AuthService', 'Login')
+  async login(data: LoginDto) {
+    return this.appService.login(data);
   }
 }
