@@ -1,6 +1,23 @@
-<ul class="remote-menu">
-  <li><a routerLink="/">Home</a></li>
-  <li><a routerLink="discovery">Discovery</a></li>
-  <li><a routerLink="checkout">Checkout</a></li>
-</ul>
-<router-outlet></router-outlet>
+<div class="min-h-screen bg-gray-50 flex flex-col">
+  <header class="bg-blue-600 text-white shadow-md">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <h1 class="text-xl font-bold">🛒 Enterprise Market</h1>
+      <nav class="space-x-4">
+        <a routerLink="/" class="hover:text-blue-200">Home</a>
+        <a routerLink="/discovery" class="hover:text-blue-200">Shop (Discovery)</a>
+        <a routerLink="/checkout" class="hover:text-blue-200">Cart (Checkout)</a>
+      </nav>
+      <a routerLink="/login" class="bg-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-800 cursor-pointer">Login</a>
+    </div>
+  </header>
+
+  <main class="flex-grow container mx-auto px-4 py-6">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="bg-gray-800 text-white py-4 mt-auto">
+    <div class="container mx-auto text-center text-sm">
+      &copy; 2026 Enterprise Marketplace. All rights reserved.
+    </div>
+  </footer>
+</div>

@@ -6,7 +6,7 @@ import { LoginDto } from './dto/login.dto';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService) { }
 
   // ❌ 'getData' aur 'getUsers' hata diye hain kyunki wo .proto file mein defined nahi thay.
   // gRPC mein sirf wahi function chalte hain jo .proto contract mein hote hain.
@@ -24,5 +24,10 @@ export class AppController {
   @GrpcMethod('AuthService', 'Login')
   async login(data: LoginDto) {
     return this.appService.login(data);
+  }
+
+  @GrpcMethod('AuthService', 'Validate') // 👈 Proto se match karein
+  async validate(data: { token: string }) {
+    return this.appService.validateToken(data.token);
   }
 }

@@ -64,10 +64,10 @@ export class AppService {
       email: user.email,
       role: user.role
     };
-
+    const accessToken = this.jwtService.sign(payload);
     // 5. Token return karein
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      accessToken: accessToken,
       user: {
         id: user.id,
         email: user.email,
@@ -90,5 +90,19 @@ export class AppService {
         createdAt: true
       }
     });
+  }
+
+  async validateToken(token: string) {
+    try {
+      // Secret key se verify karein
+      const payload = this.jwtService.verify(token); 
+      return { 
+        valid: true, 
+        userId: payload.sub // 'sub' mein ID hoti hai JWT standard mein
+      };
+    } catch (e) {
+      // Agar expired ya fake hai toh error
+      return { valid: false, userId: '' };
+    }
   }
 }

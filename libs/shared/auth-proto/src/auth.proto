@@ -24,12 +24,22 @@ message UserResponse {
 }
 
 message LoginResponse {
-  string access_token = 1;
+  string accessToken = 1;
   UserResponse user = 2;
+}
+
+message ValidateRequest {
+  string token = 1;
+}
+
+message ValidateResponse {
+  bool valid = 1;
+  string userId = 2; // User ID bhi wapas bhejenge taaki humein pata ho kaun hai
 }
 
 // 2. Service Definition (Endpoints)
 service AuthService {
   rpc Register (RegisterRequest) returns (UserResponse);
   rpc Login (LoginRequest) returns (LoginResponse);
+  rpc Validate (ValidateRequest) returns (ValidateResponse);
 }
