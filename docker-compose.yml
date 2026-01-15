@@ -85,17 +85,19 @@ services:
     networks:
       - marketplace-network
 
-  # 7. Tooling - Mongo Express (Web UI for Mongo)
+  ## 7. Tooling - Mongo Express
   mongo-express:
     image: mongo-express
     container_name: marketplace-mongo-express
     restart: always
     ports:
-      - '8081:8081'  # 8080 Kafka UI ke paas hai, isliye 8081 use kiya
+      - '8081:8081'
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-      ME_CONFIG_MONGODB_ADMINPASSWORD: password123
-      ME_CONFIG_MONGODB_URL: mongodb://admin:password123@mongo:27017/
+      # 👇 MAGIC FIX: Hum 'mongo' (Service Name) use kar rahe hain
+      ME_CONFIG_MONGODB_URL: mongodb://admin:password123@mongo:27017/?authSource=admin
+      # UI Login
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: pass
     networks:
       - marketplace-network
 

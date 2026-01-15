@@ -2,7 +2,7 @@ import { createAction, props } from '@ngrx/store';
 
 export const loginSuccess = createAction(
   '[Auth] Login Success',
-  props<{ token: string; user: any }>() // Token aur User data payload mein aayega
+  props<{ token: string; user: any }>()
 );
 
 export const logout = createAction('[Auth] Logout');

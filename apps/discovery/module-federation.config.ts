@@ -5,9 +5,32 @@ const config: ModuleFederationConfig = {
   exposes: {
     './Routes': 'apps/discovery/src/app/remote-entry/entry.routes.ts',
   },
+
+  shared: (libraryName, defaultConfig) => {
+    const singleton = {
+      ...defaultConfig,
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: 'auto',
+    };
+
+    // ✅ Your shared lib (important to keep single)
+    if (libraryName === '@marketplace/shared/data-store') {
+      return singleton;
+    }
+
+    // ✅ Angular + RxJS must be singleton too (very important)
+    if (['@angular/core', '@angular/common', '@angular/router', 'rxjs'].includes(libraryName)) {
+      return singleton;
+    }
+
+    // ✅ NgRx must be singleton, but NOT eager
+    if (['@ngrx/store', '@ngrx/effects', '@ngrx/store-devtools'].includes(libraryName)) {
+      return { ...singleton, eager: false };
+    }
+
+    return defaultConfig;
+  },
 };
 
-/**
- * Nx requires a default export of the config to allow correct resolution of the module federation graph.
- **/
 export default config;

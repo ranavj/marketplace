@@ -8,7 +8,9 @@
   "targets": {
     "build": {
       "executor": "@nx/angular:webpack-browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/discovery",
         "index": "apps/discovery/src/index.html",
@@ -20,7 +22,9 @@
             "input": "apps/discovery/public"
           }
         ],
-        "styles": ["apps/discovery/src/styles.css"],
+        "styles": [
+          "apps/discovery/src/styles.css"
+        ],
         "customWebpackConfig": {
           "path": "apps/discovery/webpack.config.ts"
         }
@@ -64,14 +68,22 @@
       },
       "configurations": {
         "production": {
-          "buildTarget": "discovery:build:production"
+          "buildTarget": "discovery:build:production",
+          "fileReplacements": [
+            {
+              "replace": "apps/discovery/src/environments/environment.ts",
+              "with": "apps/discovery/src/environments/environment.prod.ts"
+            }
+          ]
         },
         "development": {
           "buildTarget": "discovery:build:development"
         }
       },
       "defaultConfiguration": "development",
-      "dependsOn": ["shell:serve"]
+      "dependsOn": [
+        "shell:serve"
+      ]
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -84,7 +96,9 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "apps/discovery/jest.config.cts",
         "tsConfig": "apps/discovery/tsconfig.spec.json"

@@ -1,0 +1,45 @@
+<div class="bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+
+  <div class="max-w-7xl mx-auto mb-8 text-center">
+    <h2 class="text-3xl font-extrabold text-gray-900">Featured Products</h2>
+    <p class="mt-2 text-gray-600">Best items picked just for you.</p>
+  </div>
+
+  @if (loading()) {
+  <div class="flex justify-center mt-20">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+  </div>
+  }
+
+  <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+    @for (product of products(); track product.id) {
+    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      <div class="h-48 overflow-hidden bg-gray-200">
+        <img [src]="product.image" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+          alt="Product">
+      </div>
+
+      <div class="p-4">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="text-lg font-bold text-gray-900 truncate pr-2">{{ product.name }}</h3>
+          <span class="text-blue-600 font-bold">${{ product.price }}</span>
+        </div>
+        <p class="text-sm text-gray-500 line-clamp-2 mb-4">{{ product.description }}</p>
+
+        <button (click)="addItem(product)"
+          class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+          Add to Cart
+        </button>
+      </div>
+    </div>
+    } @empty {
+    @if (!loading()) {
+    <div class="col-span-full text-center text-gray-500 py-10">
+      No products available right now.
+    </div>
+    }
+    }
+
+  </div>
+</div>
