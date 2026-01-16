@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { Product, CatalogService } from '../services/catalog.service';
-import { Store } from '@ngrx/store';
-import { addToCart } from '@marketplace/shared/data-store';
+import { CartFacade } from '@marketplace/shared/data-store';
 @Component({
   selector: 'app-product-list',
   imports: [CommonModule],
@@ -15,10 +14,8 @@ export class ProductList {
   loading = signal<boolean>(true);
   
   private catalogService = inject(CatalogService);
-  private store = inject(Store); // ✅ Store Inject
+  private cartFacade = inject(CartFacade);
   ngOnInit() {
-    console.log('Store identity', this.store);
-
     this.catalogService.getProducts().subscribe({
       next: (data) => {
         this.products.set(data);
@@ -33,14 +30,11 @@ export class ProductList {
 
   addItem(product: Product) {
     console.log('Dispatching Add to Cart:', product.name);
-    
-    this.store.dispatch(addToCart({
-      item: {
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        quantity: 1
-      }
-    }));
+    this.cartFacade.addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1
+    });
   }
 }
